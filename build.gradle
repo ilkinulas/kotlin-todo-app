@@ -30,7 +30,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'com.sparkjava', name: 'spark-kotlin', version: '1.0.0-alpha'
-    compile group: 'com.github.seratch', name: 'kotliquery', version: '1.2.0'
+    compile group: 'org.jetbrains.exposed', name: 'exposed', verion: '0.10.1'
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.8'
     compile group: 'com.h2database', name: 'h2', version: '1.4.196'
     compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
