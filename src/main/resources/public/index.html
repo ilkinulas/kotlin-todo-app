@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo App For JavaDay 2018 Istanbul </title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+	New item : <input type="text" @keyup.enter="create">
+	<ul>
+		<li v-for="todo in todos">
+			<input type="checkbox" :checked="todo.done" @click="toggle(todo)">
+			{{ todo.text }}
+			<a href="#" v-if="todo.done" @click="deleteTodo(todo.id)">(delete)</a>
+		</li>
+	</ul>
+</div>
+
+<script>
+	Vue.component('editable', {
+	  template: `
+	    <div contenteditable="true" @blur="emitChange">
+	      {{ content }}
+	    </div>
+	  `,
+	  props: ['content'],
+	  methods: {
+	    emitChange (ev) {
+	      this.$emit('update', ev.target.textContent)
+	    }
+	  }
+	});
+	const app = new Vue({
+		el: '#app',
+		data: {
+			todos: []
+		},
+		methods: {
+			create: function(event) {
+	            axios.post("http://localhost:9000/todo/", event.srcElement.value).then(response => {
+	                this.todos.push(response.data);
+	            });
+	            event.srcElement.value = "";
+			},
+			toggle: function(todo) {
+				todo.done = !todo.done
+				this.update(todo)
+			},
+            update: function(todo) {
+                axios.put("http://localhost:9000/todo/"+todo.id, {"text": todo.text, "done": todo.done}).then(response => {                   
+                });
+            },
+            deleteTodo: function(id) {
+                axios.delete("http://localhost:9000/todo/"+id).then(response => {
+                    if (response.data == "ok") {
+                        for(var i = this.todos.length; i--;) {
+	                        if (this.todos[i].id === id) this.todos.splice(i, 1);	
+                        }
+                    }
+                });
+            }            
+		},
+		mounted: function() {
+			axios.get('http://localhost:9000/todo/').then(response => {
+                this.todos = response.data;
+            });
+		}
+	})
+</script>
+
+</body>
+</html>
