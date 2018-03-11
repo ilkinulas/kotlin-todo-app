@@ -5,7 +5,11 @@ import java.util.*
 object Config {
     private val properties = Properties()
 
-    fun get(key: String, defaultValue: String = ""): String = properties.getProperty(key, defaultValue)
+    fun get(key: String, defaultValue: String = ""): String {
+        System.getProperty(key)?.let { return it }
+        System.getenv(key)?.let { return it }
+        return properties.getProperty(key, defaultValue)
+    }
 
     fun isInMemoryDb() = get("jdbc.url").contains(":h2:")
 

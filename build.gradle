@@ -15,6 +15,7 @@ group 'net.ilkinulas'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
@@ -30,7 +31,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'com.sparkjava', name: 'spark-kotlin', version: '1.0.0-alpha'
-    compile group: 'org.jetbrains.exposed', name: 'exposed', verion: '0.10.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed', version: '0.10.1'
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.8'
     compile group: 'com.h2database', name: 'h2', version: '1.4.196'
     compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
@@ -46,3 +47,5 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+mainClassName = 'net.ilkinulas.WebAppKt'

@@ -16,3 +16,13 @@ services:
 
     volumes:
       - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+
+  app:
+    image: ilkinulas/todoapp:1.0
+
+    ports:
+      - 9000:9000
+
+    environment:
+      db: mysql
+      jdbc_mysql_url: jdbc:mysql://database:3306/tododb?nullNamePatternMatchesAll=true

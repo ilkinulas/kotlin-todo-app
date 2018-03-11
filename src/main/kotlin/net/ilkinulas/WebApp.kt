@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 import spark.Spark.*
+import javax.sql.DataSource
 
 
 val logger = LoggerFactory.getLogger("todo")
@@ -16,6 +17,7 @@ val mapper by lazy { jacksonObjectMapper() }
 fun main(args: Array<String>) {
     Config.init()
     setupDatabase()
+
     port(port)
     staticFileLocation("/public/")
     //externalStaticFileLocation("src/main/resources/public") //used for development
@@ -35,7 +37,7 @@ fun main(args: Array<String>) {
             transaction {
                 val todoId = Todos.insert {
                     it[text] = todoText
-                } get Todos.id
+                } get Todos.id ?: 0
                 val todo = Todos.select { (Todos.id eq todoId) }.map { rowToTodo(it) }.first()
                 mapper.writeValueAsString(todo)
             }
@@ -80,16 +82,32 @@ object Todos : Table() {
 data class Todo(val id: Int = 0, val text: String, val done: Boolean = false, val dateCreated: DateTime = DateTime.now())
 
 fun setupDatabase() {
-    val ds = HikariDataSource()
-    ds.jdbcUrl = Config.get("jdbc.url")
-    ds.username = Config.get("jdbc.username")
-    ds.password = Config.get("jdbc.password")
+    val ds = createDataSource()
     Database.connect(ds)
-
     transaction {
         SchemaUtils.create(Todos)
         addTestData()
     }
+}
+
+fun createDataSource(): DataSource {
+    val ds = HikariDataSource()
+    val dbType = System.getProperty("db", "h2").toLowerCase()
+    ds.jdbcUrl = Config.get("jdbc_${dbType}_url")
+    ds.driverClassName = Config.get("jdbc_${dbType}_driver")
+    ds.username = Config.get("jdbc_username")
+    ds.password = Config.get("jdbc_password")
+
+    for (i in (1..5)) {
+        try {
+            val con = ds.connection
+            con.close()
+            return ds
+        } catch (e: Exception) {
+            Thread.sleep(3000)
+        }
+    }
+    throw RuntimeException("Database setup failed.")
 }
 
 fun addTestData() {
