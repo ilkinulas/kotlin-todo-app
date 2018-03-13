@@ -24,5 +24,4 @@ services:
       - 9000:9000
 
     environment:
-      db: mysql
-      jdbc_mysql_url: jdbc:mysql://database:3306/tododb?nullNamePatternMatchesAll=true
+      DB_URL: jdbc:mysql://database:3306/tododb?nullNamePatternMatchesAll=true

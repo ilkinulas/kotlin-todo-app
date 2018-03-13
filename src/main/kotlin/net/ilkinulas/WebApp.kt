@@ -92,11 +92,16 @@ fun setupDatabase() {
 
 fun createDataSource(): DataSource {
     val ds = HikariDataSource()
-    val dbType = System.getProperty("db", "h2").toLowerCase()
-    ds.jdbcUrl = Config.get("jdbc_${dbType}_url")
-    ds.driverClassName = Config.get("jdbc_${dbType}_driver")
-    ds.username = Config.get("jdbc_username")
-    ds.password = Config.get("jdbc_password")
+
+    val dbUrl = Config.get("DB_URL")
+    ds.driverClassName = when {
+        dbUrl.contains(":h2:") -> "org.h2.Driver"
+        dbUrl.contains(":mysql:") -> "com.mysql.cj.jdbc.Driver"
+        else -> throw RuntimeException("Unrecognized db url $dbUrl")
+    }
+    ds.jdbcUrl = dbUrl
+    ds.username = Config.get("DB_USER")
+    ds.password = Config.get("DB_PASSWORD")
 
     for (i in (1..5)) {
         try {
