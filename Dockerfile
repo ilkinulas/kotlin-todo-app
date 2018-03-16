@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre-alpine AS GRADLE_BUILD
 
 COPY ./build/libs/kotlin-todo-app-1.0-SNAPSHOT-all.jar /opt/todo/
 
