@@ -8,12 +8,12 @@
 </head>
 <body>
 <div id="app">
-	New item : <input type="text" @keyup.enter="create">
-	<ul>
+	New item : <input id="new_item" type="text" @keyup.enter="create">
+	<ul id="todo_list">
 		<li v-for="todo in todos">
 			<input type="checkbox" :checked="todo.done" @click="toggle(todo)">
 			{{ todo.text }}
-			<a href="#" v-if="todo.done" @click="deleteTodo(todo.id)">(delete)</a>
+			<a href="#" v-if="todo.done" @click="deleteTodo(todo.id)" class="delete_link">(delete)</a>
 		</li>
 	</ul>
 </div>
@@ -39,7 +39,7 @@
 		},
 		methods: {
 			create: function(event) {
-	            axios.post("http://localhost:9000/todo/", event.srcElement.value).then(response => {
+	            axios.post("todo/", event.srcElement.value).then(response => {
 	                this.todos.push(response.data);
 	            });
 	            event.srcElement.value = "";
@@ -49,11 +49,11 @@
 				this.update(todo)
 			},
             update: function(todo) {
-                axios.put("http://localhost:9000/todo/"+todo.id, {"text": todo.text, "done": todo.done}).then(response => {                   
+                axios.put("todo/"+todo.id, {"text": todo.text, "done": todo.done}).then(response => {
                 });
             },
             deleteTodo: function(id) {
-                axios.delete("http://localhost:9000/todo/"+id).then(response => {
+                axios.delete("todo/"+id).then(response => {
                     if (response.data == "ok") {
                         for(var i = this.todos.length; i--;) {
 	                        if (this.todos[i].id === id) this.todos.splice(i, 1);	
@@ -63,7 +63,7 @@
             }            
 		},
 		mounted: function() {
-			axios.get('http://localhost:9000/todo/').then(response => {
+			axios.get("todo/").then(response => {
                 this.todos = response.data;
             });
 		}

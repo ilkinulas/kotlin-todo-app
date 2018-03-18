@@ -6,7 +6,7 @@ services:
     image : mysql:5.7.21
 
     ports:
-      - 3306:3306
+      - 3306
 
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -21,7 +21,8 @@ services:
     image: ilkinulas/todoapp:1.0
 
     ports:
-      - 9000:9000
+      - 9000
 
     environment:
-      DB_URL: jdbc:mysql://database:3306/tododb?nullNamePatternMatchesAll=true
+      DB_URL: jdbc:mysql://database:3306/tododb?nullNamePatternMatchesAll=true&useSSL=false
+

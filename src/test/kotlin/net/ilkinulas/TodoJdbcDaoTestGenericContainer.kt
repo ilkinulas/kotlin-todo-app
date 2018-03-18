@@ -10,10 +10,12 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.ClassRule
 import org.junit.Test
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MySQLContainer
 import javax.sql.DataSource
 
-class KMysqlContainer(dockerImageName: String) : MySQLContainer<KMysqlContainer>(dockerImageName)
+class KMysqlContainer(dockerImage: String) : MySQLContainer<KMysqlContainer>(dockerImage)
+class KGenericContainer(dockerImage: String) : GenericContainer<KGenericContainer>(dockerImage)
 
 class TodoJdbcDaoTestGenericContainer {
     companion object {

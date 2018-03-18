@@ -41,7 +41,10 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.testcontainers', name: 'mysql', version: '1.6.0'
+    testCompile group: 'org.testcontainers', name: 'selenium', version: '1.6.0'
     testCompile group: 'org.testcontainers', name: 'testcontainers', version: '1.6.0'
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: '3.11.0'
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-support', version: '3.11.0'
     testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.17.1'
 }
 

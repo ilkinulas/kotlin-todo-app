@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
 
     port(port)
     staticFileLocation("/public/")
+//    externalStaticFileLocation("src/main/resources/public") //used for development
 
     logger.info("Todo App is ready, listening on port $port")
     path("/todo/") {

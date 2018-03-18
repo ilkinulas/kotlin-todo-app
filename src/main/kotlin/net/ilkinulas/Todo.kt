@@ -66,6 +66,7 @@ fun createDataSource(): DataSource {
     ds.username = Config.get("DB_USER")
     ds.password = Config.get("DB_PASSWORD")
 
+    logger.info("Usind db url : ${ds.jdbcUrl}")
     for (i in (1..5)) {
         try {
             val con = ds.connection

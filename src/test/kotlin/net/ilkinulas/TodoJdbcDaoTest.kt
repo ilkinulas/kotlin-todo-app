@@ -14,7 +14,7 @@ import org.testcontainers.containers.DockerComposeContainer
 import java.io.File
 import javax.sql.DataSource
 
-class KDockerComposeContainer(composeFile: String) : DockerComposeContainer<KDockerComposeContainer>(File(composeFile))
+class KDockerComposeContainer(vararg composeFiles: String) : DockerComposeContainer<KDockerComposeContainer>(composeFiles.map { File(it) })
 
 const val SERVICE_PORT = 3306
 const val SERVICE_NAME = "database_1"
