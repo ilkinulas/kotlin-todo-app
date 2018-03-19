@@ -27,6 +27,14 @@ class TodoJdbcDaoTestGenericContainer {
                 .withUsername("todouser")
                 .withPassword("todopass")
 
+//        @ClassRule
+//        @JvmField
+//        val database = KGenericContainer("mysql:5.7.21")
+//                .withExposedPorts(3306)
+//                .withEnv("MYSQL_ROOT_PASSWORD", "root")
+//                .withEnv("MYSQL_DATABASE", "tododb")
+//                .withEnv("MYSQL_USER", "todouser")
+//                .withEnv("MYSQL_PASSWORD", "todopass")
 
         lateinit var dataSource: DataSource
 

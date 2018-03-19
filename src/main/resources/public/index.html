@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Demo App For JavaDay 2018 Istanbul </title>
+	<link rel="stylesheet" href="css/todo.css">
     <script src="js/vue.js"></script>
     <script src="js/axios.min.js"></script>
 </head>
 <body>
+<h1>Demo App For JavaDay 2018</h1>
+
 <div id="app">
-	New item : <input id="new_item" type="text" @keyup.enter="create">
-	<ul id="todo_list">
+	<b>Create new TODO item :</b> <input id="new_item" type="text" @keyup.enter="create">
+	<ul v-if="todos.length" id="todo_list">
 		<li v-for="todo in todos">
 			<input type="checkbox" :checked="todo.done" @click="toggle(todo)">
 			{{ todo.text }}
 			<a href="#" v-if="todo.done" @click="deleteTodo(todo.id)" class="delete_link">(delete)</a>
 		</li>
 	</ul>
+	<h2  id="all_done_title" v-else>All Done! Congrats</h2>
 </div>
 
 <script>
