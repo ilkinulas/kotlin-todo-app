@@ -45,7 +45,6 @@ dependencies {
     testCompile group: 'org.testcontainers', name: 'testcontainers', version: '1.6.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: '3.11.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-support', version: '3.11.0'
-    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.17.1'
 }
 
 compileKotlin {
@@ -56,3 +55,7 @@ compileTestKotlin {
 }
 
 mainClassName = 'net.ilkinulas.WebAppKt'
+
+//test {
+//    maxParallelForks = 8
+//}

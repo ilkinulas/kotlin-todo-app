@@ -18,23 +18,16 @@ class KMysqlContainer(dockerImage: String) : MySQLContainer<KMysqlContainer>(doc
 class KGenericContainer(dockerImage: String) : GenericContainer<KGenericContainer>(dockerImage)
 
 class TodoJdbcDaoTestGenericContainer {
-    companion object {
 
+    companion object {
+        const val dbUser = "todouser"
+        const val dbPassword = "todopass"
         @ClassRule
         @JvmField
         val database = KMysqlContainer("mysql:5.7.21")
                 .withDatabaseName("tododb")
-                .withUsername("todouser")
-                .withPassword("todopass")
-
-//        @ClassRule
-//        @JvmField
-//        val database = KGenericContainer("mysql:5.7.21")
-//                .withExposedPorts(3306)
-//                .withEnv("MYSQL_ROOT_PASSWORD", "root")
-//                .withEnv("MYSQL_DATABASE", "tododb")
-//                .withEnv("MYSQL_USER", "todouser")
-//                .withEnv("MYSQL_PASSWORD", "todopass")
+                .withUsername(dbUser)
+                .withPassword(dbPassword)
 
         lateinit var dataSource: DataSource
 
@@ -42,12 +35,10 @@ class TodoJdbcDaoTestGenericContainer {
         @JvmStatic
         fun createDataSource() {
             val ds = HikariDataSource()
-            val host = "localhost"
-            val port = database.getMappedPort(3306)
             ds.driverClassName = "com.mysql.cj.jdbc.Driver"
-            ds.jdbcUrl = "jdbc:mysql://$host:$port/tododb?nullNamePatternMatchesAll=true"
-            ds.username = "todouser"
-            ds.password = "todopass"
+            ds.jdbcUrl = database.jdbcUrl
+            ds.username = dbUser
+            ds.password = dbPassword
             ds.maximumPoolSize = 1
             val connection = ds.connection
             connection.close()
