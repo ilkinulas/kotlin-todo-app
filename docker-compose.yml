@@ -16,6 +16,9 @@ services:
 
     volumes:
       - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+    tmpfs:
+      - /var/lib/mysql/:rw,noexec,nosuid,size=600m
+      - /tmp/:rw,noexec,nosuid,size=50m
 
   app:
     image: ilkinulas/todoapp:1.0

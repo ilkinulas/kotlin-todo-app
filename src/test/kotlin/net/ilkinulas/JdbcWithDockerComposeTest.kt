@@ -10,16 +10,12 @@ import org.junit.Before
 import org.junit.ClassRule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.testcontainers.containers.DockerComposeContainer
-import java.io.File
 import javax.sql.DataSource
-
-class KDockerComposeContainer(vararg composeFiles: String) : DockerComposeContainer<KDockerComposeContainer>(composeFiles.map { File(it) })
 
 const val SERVICE_PORT = 3306
 const val SERVICE_NAME = "database_1"
 
-class TodoJdbcDaoTest {
+class JdbcWithDockerComposeTest {
     companion object {
 
         val database = KDockerComposeContainer("docker-compose.yml")

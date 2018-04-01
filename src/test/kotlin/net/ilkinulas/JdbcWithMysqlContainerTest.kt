@@ -10,14 +10,12 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.ClassRule
 import org.junit.Test
+import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MySQLContainer
 import javax.sql.DataSource
 
-class KMysqlContainer(dockerImage: String) : MySQLContainer<KMysqlContainer>(dockerImage)
-class KGenericContainer(dockerImage: String) : GenericContainer<KGenericContainer>(dockerImage)
-
-class TodoJdbcDaoTestGenericContainer {
+class JdbcWithMysqlContainerTest {
 
     companion object {
         const val dbUser = "todouser"
@@ -28,6 +26,8 @@ class TodoJdbcDaoTestGenericContainer {
                 .withDatabaseName("tododb")
                 .withUsername(dbUser)
                 .withPassword(dbPassword)
+                .withClasspathResourceMapping("init-scripts", "/docker-entrypoint-initdb.d", BindMode.READ_ONLY)
+
 
         lateinit var dataSource: DataSource
 
@@ -43,6 +43,7 @@ class TodoJdbcDaoTestGenericContainer {
             val connection = ds.connection
             connection.close()
             dataSource = ds
+            Database.connect(dataSource)
         }
     }
 
@@ -50,24 +51,19 @@ class TodoJdbcDaoTestGenericContainer {
 
     @Before
     fun setup() {
-        Database.connect(dataSource)
-        transaction {
-            SchemaUtils.create(Todos)
-            Todos.deleteAll()
-        }
         dao = TodoJdbcDao(dataSource)
     }
 
     @Test
     fun test_insert_and_select_all() {
         transaction {
+            val numRows = dao.selectAll().size
             for (i in 1..10) {
                 dao.insert("todo-$i")
             }
-            TestCase.assertEquals(10, dao.selectAll().size)
+            TestCase.assertEquals(numRows + 10, dao.selectAll().size)
         }
     }
-
 
     @Test
     fun test_select_by_id() {
