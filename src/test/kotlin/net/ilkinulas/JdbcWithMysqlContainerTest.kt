@@ -2,6 +2,7 @@ package net.ilkinulas
 
 import com.zaxxer.hikari.HikariDataSource
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteAll
@@ -28,30 +29,21 @@ class JdbcWithMysqlContainerTest {
                 .withPassword(dbPassword)
                 .withClasspathResourceMapping("init-scripts", "/docker-entrypoint-initdb.d", BindMode.READ_ONLY)
 
-
-        lateinit var dataSource: DataSource
-
-        @BeforeClass
-        @JvmStatic
-        fun createDataSource() {
-            val ds = HikariDataSource()
-            ds.driverClassName = "com.mysql.cj.jdbc.Driver"
-            ds.jdbcUrl = database.jdbcUrl
-            ds.username = dbUser
-            ds.password = dbPassword
-            ds.maximumPoolSize = 1
-            val connection = ds.connection
-            connection.close()
-            dataSource = ds
-            Database.connect(dataSource)
-        }
     }
 
     lateinit var dao: TodoJdbcDao
 
     @Before
     fun setup() {
-        dao = TodoJdbcDao(dataSource)
+        val ds = HikariDataSource()
+        ds.driverClassName = "com.mysql.cj.jdbc.Driver"
+        ds.jdbcUrl = database.jdbcUrl
+        println("JDBC URL = ${database.jdbcUrl}")
+        ds.username = dbUser
+        ds.password = dbPassword
+        ds.maximumPoolSize = 1
+
+        dao = TodoJdbcDao(ds)
     }
 
     @Test
@@ -61,7 +53,7 @@ class JdbcWithMysqlContainerTest {
             for (i in 1..10) {
                 dao.insert("todo-$i")
             }
-            TestCase.assertEquals(numRows + 10, dao.selectAll().size)
+            assertEquals(numRows + 10, dao.selectAll().size)
         }
     }
 
@@ -71,8 +63,8 @@ class JdbcWithMysqlContainerTest {
             val todoText = "Don't forget to call Dad."
             val id = dao.insert(todoText)
             val todo = dao.select(id)
-            TestCase.assertEquals(todoText, todo.text)
-            TestCase.assertEquals(id, todo.id)
+            assertEquals(todoText, todo.text)
+            assertEquals(id, todo.id)
         }
     }
 
@@ -82,15 +74,15 @@ class JdbcWithMysqlContainerTest {
             val todoText = "Don't forget to call Dad."
             val id = dao.insert(todoText)
             var todo = dao.select(id)
-            TestCase.assertEquals(todoText, todo.text)
-            TestCase.assertEquals(id, todo.id)
-            TestCase.assertEquals(false, todo.done)
+            assertEquals(todoText, todo.text)
+            assertEquals(id, todo.id)
+            assertEquals(false, todo.done)
 
             dao.update(id, "Don't forget to call Mom.", true)
             todo = dao.select(id)
-            TestCase.assertEquals(todoText.replace("Dad", "Mom"), todo.text)
-            TestCase.assertEquals(id, todo.id)
-            TestCase.assertEquals(true, todo.done)
+            assertEquals(todoText.replace("Dad", "Mom"), todo.text)
+            assertEquals(id, todo.id)
+            assertEquals(true, todo.done)
         }
     }
 }
