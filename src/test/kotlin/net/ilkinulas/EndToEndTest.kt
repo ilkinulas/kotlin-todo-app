@@ -18,8 +18,6 @@ import org.testcontainers.containers.Network
 import java.io.File
 import java.time.Duration
 
-class BrowserContainer : BrowserWebDriverContainer<BrowserContainer>()
-
 class EndToEndTest {
 
     companion object {
@@ -43,7 +41,7 @@ class EndToEndTest {
                 .withNetwork(network)
                 .withNetworkAliases("browser")
                 .withDesiredCapabilities(DesiredCapabilities.chrome())
-                .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL, File("./out/"))
+                .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL, File("./out"))
 
 
         @ClassRule

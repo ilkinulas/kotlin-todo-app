@@ -1,5 +1,6 @@
 package net.ilkinulas
 
+import org.testcontainers.containers.BrowserWebDriverContainer
 import org.testcontainers.containers.DockerComposeContainer
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MySQLContainer
@@ -11,3 +12,5 @@ class KMysqlContainer(dockerImage: String) : MySQLContainer<KMysqlContainer>(doc
 class KGenericContainer(dockerImage: String) : GenericContainer<KGenericContainer>(dockerImage)
 
 class KDockerComposeContainer(vararg composeFiles: String) : DockerComposeContainer<KDockerComposeContainer>(composeFiles.map { File(it) })
+
+class BrowserContainer : BrowserWebDriverContainer<BrowserContainer>("selenium/standalone-chrome-debug:3.11.0")

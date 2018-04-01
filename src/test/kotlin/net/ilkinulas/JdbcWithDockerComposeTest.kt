@@ -20,8 +20,6 @@ class JdbcWithDockerComposeTest {
 
         val database = KDockerComposeContainer("docker-compose.yml")
                 .withExposedService(SERVICE_NAME, SERVICE_PORT)
-                .withLocalCompose(true) //Docker-compose version 3 is not supported by TestContainers.
-                .withPull(false) //TODO remove this before pushing.
 
         val databaseHealthCheck = HealthCheckRule(fun() = databaseHealthCheck(), 50, 100)
 
