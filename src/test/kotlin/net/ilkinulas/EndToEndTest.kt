@@ -26,7 +26,7 @@ class EndToEndTest {
 
         val database = KMysqlContainer("mysql:5.7.21")
                 .withNetwork(network)
-                .withNetworkAliases("database")
+                .withNetworkAliases("dockerCompose")
                 .withDatabaseName("tododb")
                 .withUsername("todouser")
                 .withPassword("todopass")
@@ -35,7 +35,7 @@ class EndToEndTest {
                 .withNetwork(network)
                 .withNetworkAliases("todoapp")
                 .withExposedPorts(9000)
-                .withEnv("DB_URL", "jdbc:mysql://database:3306/tododb")
+                .withEnv("DB_URL", "jdbc:mysql://dockerCompose:3306/tododb")
 
         val browser = BrowserContainer()
                 .withNetwork(network)

@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
 import org.junit.ClassRule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import javax.sql.DataSource
 
 const val SERVICE_PORT = 3306
@@ -17,46 +16,34 @@ const val SERVICE_NAME = "database_1"
 
 class JdbcWithDockerComposeTest {
     companion object {
-
-        val database = KDockerComposeContainer("docker-compose.yml")
-                .withExposedService(SERVICE_NAME, SERVICE_PORT)
-
-        val databaseHealthCheck = HealthCheckRule(fun() = databaseHealthCheck(), 50, 100)
-
-        lateinit var dataSource: DataSource
-
         @ClassRule
         @JvmField
-        val ruleChain = RuleChain.outerRule(database).around(databaseHealthCheck)
+        val dockerCompose = KDockerComposeContainer("docker-compose.yml")
+                .withExposedService(SERVICE_NAME, SERVICE_PORT)
+    }
 
-        fun createDataSource(maxConnections: Int = 1): DataSource {
-            val ds = HikariDataSource()
-            val host = database.getServiceHost(SERVICE_NAME, SERVICE_PORT)
-            val port = database.getServicePort(SERVICE_NAME, SERVICE_PORT)
+    lateinit var dataSource: DataSource
 
-            ds.driverClassName = "com.mysql.cj.jdbc.Driver"
-            ds.jdbcUrl = "jdbc:mysql://$host:$port/tododb?nullNamePatternMatchesAll=true"
-            ds.username = "todouser"
-            ds.password = "todopass"
-            ds.maximumPoolSize = maxConnections
-            val connection = ds.connection
-            connection.close()
-            return ds
-        }
+    private fun createDataSource(maxConnections: Int = 1): DataSource {
+        val ds = HikariDataSource()
+        val host = dockerCompose.getServiceHost(SERVICE_NAME, SERVICE_PORT)
+        val port = dockerCompose.getServicePort(SERVICE_NAME, SERVICE_PORT)
 
-        fun databaseHealthCheck() =
-                try {
-                    dataSource = createDataSource()
-                    SuccessOrFailure.success()
-                } catch (e: Exception) {
-                    SuccessOrFailure.fail(e.message ?: "Failed to create DataSource")
-                }
+        ds.driverClassName = "com.mysql.cj.jdbc.Driver"
+        ds.jdbcUrl = "jdbc:mysql://$host:$port/tododb?nullNamePatternMatchesAll=true"
+        ds.username = "todouser"
+        ds.password = "todopass"
+        ds.maximumPoolSize = maxConnections
+        val connection = ds.connection
+        connection.close()
+        return ds
     }
 
     lateinit var dao: TodoJdbcDao
 
     @Before
     fun setup() {
+        dataSource = createDataSource()
         Database.connect(dataSource)
         transaction {
             SchemaUtils.create(Todos)
@@ -74,7 +61,6 @@ class JdbcWithDockerComposeTest {
             assertEquals(10, dao.selectAll().size)
         }
     }
-
 
     @Test
     fun test_select_by_id() {
@@ -105,6 +91,3 @@ class JdbcWithDockerComposeTest {
         }
     }
 }
-
-
-

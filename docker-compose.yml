@@ -5,9 +5,6 @@ services:
   database:
     image : mysql:5.7.21
 
-    ports:
-      - 3306
-
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tododb
