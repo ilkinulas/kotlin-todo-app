@@ -30,7 +30,7 @@ class JdbcWithDockerComposeTest {
         val port = dockerCompose.getServicePort(SERVICE_NAME, SERVICE_PORT)
 
         ds.driverClassName = "com.mysql.cj.jdbc.Driver"
-        ds.jdbcUrl = "jdbc:mysql://$host:$port/tododb?nullNamePatternMatchesAll=true"
+        ds.jdbcUrl = "jdbc:mysql://$host:$port/tododb"
         ds.username = "todouser"
         ds.password = "todopass"
         ds.maximumPoolSize = maxConnections

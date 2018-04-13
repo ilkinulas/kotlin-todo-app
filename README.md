@@ -14,7 +14,7 @@ You can configure it to use mysql database with the `-DDB_URL=....` program argu
 
 ```
 java \
- -DDB_URL="jdbc:mysql://127.0.0.1:3306/tododb?nullNamePatternMatchesAll=true"  \
+ -DDB_URL="jdbc:mysql://127.0.0.1:3306/tododb"  \
  -jar ./build/libs/kotlin-todo-app-1.0-SNAPSHOT-all.jar`
 ```
 
@@ -36,7 +36,7 @@ MySQL database usage is enabled by the environment variable DB_URL as seen below
 ```
 docker run \
  -p 9000:9000 \
- -e DB_URL="jdbc:mysql://172.23.0.1:3306/tododb?nullNamePatternMatchesAll=true" \
+ -e DB_URL="jdbc:mysql://172.23.0.1:3306/tododb" \
  ilkinulas/todoapp:1.0
 ```
 

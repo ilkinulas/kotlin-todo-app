@@ -1,20 +1,12 @@
 package net.ilkinulas
 
 import com.zaxxer.hikari.HikariDataSource
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.ClassRule
 import org.junit.Test
 import org.testcontainers.containers.BindMode
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.MySQLContainer
-import javax.sql.DataSource
 
 class JdbcWithMysqlContainerTest {
 
