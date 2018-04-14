@@ -1,6 +1,14 @@
+FROM gradle:4.6.0-jdk8-alpine AS builder
+USER root
+RUN mkdir /home/gradle/project
+
+WORKDIR /home/gradle/project
+COPY . .
+RUN gradle clean shadowJar -s
+
 FROM openjdk:8-jre-alpine
 
-COPY ./build/libs/kotlin-todo-app-1.0-SNAPSHOT-all.jar /opt/todo/
+COPY --from=builder /home/gradle/project/build/libs/kotlin-todo-app-1.0-SNAPSHOT-all.jar /opt/todo/
 
 WORKDIR /opt/todo
 EXPOSE 9000

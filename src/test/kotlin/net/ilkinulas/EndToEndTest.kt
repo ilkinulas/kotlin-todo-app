@@ -12,9 +12,9 @@ import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.FluentWait
-import org.openqa.selenium.support.ui.Wait
 import org.testcontainers.containers.BrowserWebDriverContainer
 import org.testcontainers.containers.Network
+import org.testcontainers.containers.wait.strategy.Wait
 import java.io.File
 import java.time.Duration
 
@@ -26,7 +26,7 @@ class EndToEndTest {
 
         val database = KMysqlContainer("mysql:5.7.21")
                 .withNetwork(network)
-                .withNetworkAliases("dockerCompose")
+                .withNetworkAliases("database")
                 .withDatabaseName("tododb")
                 .withUsername("todouser")
                 .withPassword("todopass")
@@ -35,7 +35,8 @@ class EndToEndTest {
                 .withNetwork(network)
                 .withNetworkAliases("todoapp")
                 .withExposedPorts(9000)
-                .withEnv("DB_URL", "jdbc:mysql://dockerCompose:3306/tododb")
+                .withEnv("DB_URL", "jdbc:mysql://database:3306/tododb")
+                .waitingFor(Wait.forHttp("/").forStatusCode(200))
 
         val browser = BrowserContainer()
                 .withNetwork(network)

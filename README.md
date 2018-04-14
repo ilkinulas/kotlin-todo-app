@@ -24,9 +24,6 @@ To build a docker image run:
 
 `docker build -t ilkinulas/todoapp:1.0 .`
 
-It is important to run `./gradlew clean shadowJar` before building the docker image, because the "COPY" command in the DockerFile
-copies the generated jar file to container's file system.
-
 You can start the container by running command below. This default setup will use the in memory database.
 
 `docker run -p 9000:9000 ilkinulas/todoapp:1.0`

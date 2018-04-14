@@ -47,7 +47,7 @@ CREATE TABLE `Todos` (
 
 LOCK TABLES `Todos` WRITE;
 /*!40000 ALTER TABLE `Todos` DISABLE KEYS */;
-INSERT INTO `Todos` VALUES (1,'Prepare presentation for JavaDay 2018.',1,'2018-04-01');
+INSERT INTO `Todos` VALUES (1,'Read more books in 2018',1,'2018-04-01');
 INSERT INTO `Todos` VALUES (2,'Favor object composition over class inheritance.',1,'2018-04-01');
 INSERT INTO `Todos` VALUES (3,'Automate your tests.',1,'2018-04-01');
 /*!40000 ALTER TABLE `Todos` ENABLE KEYS */;

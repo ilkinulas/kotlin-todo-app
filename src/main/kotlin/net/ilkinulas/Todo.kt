@@ -48,7 +48,7 @@ class TodoJdbcDao(val dataSource: DataSource) : TodoDao {
 }
 
 fun addTestData() {
-    Todos.insert { it[text] = "Prepare presentation for JavaDay 2018." }
+    Todos.insert { it[text] = "Read more books in 2018." }
     Todos.insert { it[text] = "Favor object composition over class inheritance." }
     Todos.insert { it[text] = "Automate your tests." }
 }
