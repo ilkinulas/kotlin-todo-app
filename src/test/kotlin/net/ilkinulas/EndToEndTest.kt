@@ -34,7 +34,6 @@ class EndToEndTest {
         val todoapp = KGenericContainer("ilkinulas/todoapp:1.0")
                 .withNetwork(network)
                 .withNetworkAliases("todoapp")
-                .withExposedPorts(9000)
                 .withEnv("DB_URL", "jdbc:mysql://database:3306/tododb")
                 .waitingFor(Wait.forHttp("/").forStatusCode(200))
 
