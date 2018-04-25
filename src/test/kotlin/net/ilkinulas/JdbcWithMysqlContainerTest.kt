@@ -13,6 +13,7 @@ class JdbcWithMysqlContainerTest {
     companion object {
         const val dbUser = "todouser"
         const val dbPassword = "todopass"
+
         @ClassRule
         @JvmField
         val database = KMysqlContainer("mysql:5.7.21")

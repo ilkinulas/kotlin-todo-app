@@ -35,6 +35,7 @@ class EndToEndTest {
                 .withNetwork(network)
                 .withNetworkAliases("todoapp")
                 .withEnv("DB_URL", "jdbc:mysql://database:3306/tododb")
+                .withExposedPorts(9000)
                 .waitingFor(Wait.forHttp("/").forStatusCode(200))
 
         val browser = BrowserContainer()
